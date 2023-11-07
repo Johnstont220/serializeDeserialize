@@ -1,17 +1,84 @@
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
-public class Main {
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Serialize {
     public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        // Serialize objects to a CSV file
+        List<nflPlayers> yourObjectList = new ArrayList<>();
+        yourObjectList.add(new nflPlayers("Michael Thomas", 30, 6.3));
+        yourObjectList.add(new nflPlayers("Taysom Hill", 33, 6.2));
 
-        // Press Shift+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
+        String csvFileName = "data.csv";
 
-            // Press Shift+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
+        try (FileWriter fileWriter = new FileWriter(csvFileName);
+             BufferedWriter writer = new BufferedWriter(fileWriter)) {
+
+            // Write the CSV header
+            writer.write("Name,Age,Height\n");
+
+            // Write each object as a CSV line
+            for (nflPlayers object : yourObjectList) {
+                writer.write(object.getName() + "," + object.getAge() + "," + object.getHeight() + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Deserialize objects from the CSV file
+        List<nflPlayers> deserializedObjects = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFileName)) ) {
+            // Skip the header line
+            reader.readLine();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 3) {
+                    String name = parts[0];
+                    int age = Integer.parseInt(parts[1]);
+                    double height = Double.parseDouble(parts[2]);
+                    deserializedObjects.add(new nflPlayers(name, age, height));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Verify the deserialized objects
+        for (nflPlayers object : deserializedObjects) {
+            System.out.println(object);
+        }
+    }
+
+    // Define object here
+    static class nflPlayers {
+        private String name;
+        private int age;
+        private double height;
+
+        public nflPlayers(String name, int age, double height) {
+            this.name = name;
+            this.age = age;
+            this.height = height;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getAge() {
+            return age;
+        }
+
+        public double getHeight() {
+            return height;
+        }
+
+        @Override
+        public String toString() {
+            return "Name: " + name + ", Age: " + age + ", Height: " + height;
         }
     }
 }
