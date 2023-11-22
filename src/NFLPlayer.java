@@ -10,8 +10,6 @@ class NFLPlayer implements Serializable {
     private double salary;
 
     // Constructors
-    public NFLPlayer() {
-    }
 
     public NFLPlayer(String name, int yearOfBirth, double salary) {
         this.name = name;
@@ -19,30 +17,6 @@ class NFLPlayer implements Serializable {
         this.salary = salary;
     }
 
-    // Getters and Setters
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getYearOfBirth() {
-        return yearOfBirth;
-    }
-
-    public void setYearOfBirth(int yearOfBirth) {
-        this.yearOfBirth = yearOfBirth;
-    }
-
-    public double getSalary() {
-        return salary;
-    }
-
-    public void setSalary(double salary) {
-        this.salary = salary;
-    }
 
     // Serialization method using java.nio.file
     static void serializeToCSV(String filename, NFLPlayer... players) {
